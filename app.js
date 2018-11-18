@@ -1,6 +1,9 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
+var config = require('./config/ressources.js');
+// var io = require('socket.io');
+const io = require('socket.io')();
 
 // MongoDB initialization and connection
 mongoose.Promise = Promise;
@@ -9,7 +12,7 @@ var options = {
     useMongoClient: true
 };
 
-var urlmongo = "mongodb://127.0.0.1:27017/ikka_master";
+var urlmongo = config.mongoURL;
 
 mongoose.connect(urlmongo, options);
 
@@ -102,8 +105,20 @@ router.route('/groceries')
 
 
 app.use(router);
-var HOSTNAME = '192.168.1.33';
-var PORT = 4242;
-app.listen(PORT, HOSTNAME, function() {
-    console.log("Server listening on http://" + HOSTNAME + ":" + PORT);
+io.listen(app.listen(config.serverPort, config.serverIP, () => {
+    console.log("Server listening on http://" + config.serverIP + ":" + config.serverPort);
+}));
+
+
+
+io.on('connection', function(socket) {
+    console.log('a user connected');
+
+    socket.on('disconnect', function() {
+        console.log('user disconnected');
+    });
+
+    socket.on('hello', (content) => {
+        console.log(content);
+    });
 });
