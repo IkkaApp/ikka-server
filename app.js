@@ -1,8 +1,7 @@
 var express = require('express');
 var bodyParser = require("body-parser");
 var mongoose = require('mongoose');
-var config = require('./config/ressources.js');
-// var io = require('socket.io');
+var config = require('./config/resources.js');
 const io = require('socket.io')();
 
 // MongoDB initialization and connection
@@ -13,13 +12,12 @@ var options = {
 };
 
 var urlmongo = config.mongoURL;
-
 mongoose.connect(urlmongo, options);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error during connection'));
 db.once('open', function() {
-    console.log("Connected to database");
+    console.log("[MongoDB] Connected to database at " + urlmongo);
 });
 
 var groceryScheme = mongoose.Schema({
@@ -66,7 +64,7 @@ router.route('/groceries')
 
 
         var query = Grocery.find(null);
-        query.where('type', 'vegetable');
+        query.where('type', 'Vegetable');
         query.limit(3);
         query.then(function(doc) {
             res.json({
@@ -106,19 +104,21 @@ router.route('/groceries')
 
 app.use(router);
 io.listen(app.listen(config.serverPort, config.serverIP, () => {
-    console.log("Server listening on http://" + config.serverIP + ":" + config.serverPort);
+    console.log("[Server] Server listening on http://" + config.serverIP + ":" + config.serverPort);
+    console.log("[Socket.io] Communication established on http://" + config.serverIP + ":" + config.serverPort);
 }));
 
 
 
 io.on('connection', function(socket) {
-    console.log('a user connected');
+    console.log('[Socket.io] User connected');
 
     socket.on('disconnect', function() {
-        console.log('user disconnected');
+        console.log('[Socket.io] User disconnected');
     });
 
     socket.on('hello', (content) => {
         console.log(content);
+        socket.emit('answer', 'it works !');
     });
 });

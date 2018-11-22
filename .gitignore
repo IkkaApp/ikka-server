@@ -1,6 +1,6 @@
 /node_modules
 .ftpconfig
-/config/ressources.js
+/config/resources.js
 
 
 
@@ -26,4 +26,4 @@ client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 
-client/src/config/ressources.js
+client/src/config/resources.js

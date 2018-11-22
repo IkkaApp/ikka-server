@@ -1,28 +1,25 @@
 import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
-import socketIOClient from 'socket.io-client';
-var config = require('./config/ressources.js');
+import {socket} from './config/communications.js';
 
 class App extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {
-            socket: null
-        }
+        this.state = {}
 
         this.sendIO = this.sendIO.bind(this);
     }
 
     componentDidMount() {
-        this.setState({
-            socket: socketIOClient('http://' + config.endpointIP + ':' + config.endpointPort)
+        socket.on('answer', (data) => {
+            console.log('incoming : ' + data);
         });
     }
 
     sendIO() {
-        this.state.socket.emit('hello', {
+        socket.emit('hello', {
             hello: 'world',
             bye: 'people'
         });
