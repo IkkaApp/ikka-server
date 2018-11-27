@@ -8,7 +8,7 @@
     "dev": "pm2 start pm2-setup.json && npm --prefix ./client start",
     "install-all": "npm install && npm --prefix ./client install",
     "setup": "npm run --silent setup:server && npm run --silent setup:socket",
-    "setup:server": "mkdir -p config && echo \"[Setup] Hostname for server & socket ?\" && read hostnameVar && echo \"[Setup] Port for your server ?\" && read portVar && echo \"module.exports = {\n\tmongoURL: 'mongodb://$hostnameVar:27017/ikka-database',\n\tserverIP: '$hostnameVar',\n\tserverPort: '$portVar'\n}\" > config/resources.js",
+    "setup:server": "mkdir -p config && echo \"[Setup] Hostname for server & socket ?\" && read hostnameVar && echo \"[Setup] Port for your server ?\" && read portVar && echo \"[Setup] Hostname for MongoDB endpoint ?\" && read mongoDBVar && echo \"module.exports = {\n\tmongoURL: 'mongodb://$mongoDBVar:27017/ikka-database',\n\tserverIP: '$hostnameVar',\n\tserverPort: '$portVar'\n}\" > config/resources.js",
     "setup:socket": "mkdir -p client/src/config && echo \"[Setup] Hostname for socket.io endpoint ?\" && read socketVar && echo \"[Setup] Port for socket.io endpoint ?\" && read socketPortVar && echo \"module.exports = {\n\tendpointIP:'$socketVar',\n\tendpointPort:'$socketPortVar'\n}\" > client/src/config/resources.js && echo \"Setup completed :)\"",
     "stop": "pm2 delete app.js"
   },
