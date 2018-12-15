@@ -17,7 +17,7 @@ mongoose.connect(urlmongo, options);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Error during connection'));
 db.once('open', function() {
-    console.log("[MongoDB] Connected to database at " + urlmongo);
+    console.log('\x1b[36m%s\x1b[0m', "[MongoDB] Connected to database at " + urlmongo);
 });
 
 var groceryScheme = mongoose.Schema({
@@ -50,6 +50,14 @@ router.route('/')
             message: "Welcome to Ikka app !",
             methode: req.method
         });
+    });
+
+router.route('/login')
+    .post((req, res) => {
+        res.json({
+            message: "Login post",
+            methode: req.method
+        })
     });
 
 router.route('/groceries')
@@ -92,9 +100,13 @@ router.route('/groceries')
         gr.save((err) => {
             if (err)
                 res.send(err);
+
+            io.sockets.emit('grocery:refresh');
+
             res.json({
                 message: 'Grocery succesfully added'
             });
+
         });
     })
 
@@ -104,21 +116,84 @@ router.route('/groceries')
 
 app.use(router);
 io.listen(app.listen(config.serverPort, config.serverIP, () => {
-    console.log("[Server] Server listening on http://" + config.serverIP + ":" + config.serverPort);
-    console.log("[Socket.io] Communication established on http://" + config.serverIP + ":" + config.serverPort);
+    console.log('\x1b[36m%s\x1b[0m', "[Server] Server listening on http://" + config.serverIP + ":" + config.serverPort);
+    console.log('\x1b[36m%s\x1b[0m', "[Socket.io] Communication established on http://" + config.serverIP + ":" + config.serverPort);
 }));
 
 
 
 io.on('connection', function(socket) {
-    console.log('[Socket.io] User connected');
+    console.log('\x1b[36m%s\x1b[0m', '[Socket.io] User connected');
+    socket.emit('connected');
 
     socket.on('disconnect', function() {
-        console.log('[Socket.io] User disconnected');
+        console.log('\x1b[36m%s\x1b[0m', '[Socket.io] User disconnected');
     });
 
-    socket.on('hello', (content) => {
-        console.log(content);
-        socket.emit('answer', 'it works !');
+
+    /* ---- PRODUCT ---- */
+    // socket.on('get_product', (content) => {
+    //     var query = Grocery.find({
+    //         name: content.object
+    //     });
+    //
+    //     query.then(function(doc) {
+    //         socket.emit('result', doc);
+    //     });
+    // });
+
+    // socket.on('get_all_products', (data) => {
+    //     var query = Grocery.find({}, 'name');
+    //
+    //     query.then(function(doc) {
+    //         socket.emit('result', doc);
+    //     });
+    // });
+
+    /* ---- TYPE ---- */
+    socket.on('type/all:get', () => {
+        var query = Grocery.find({}, 'type');
+
+        query.then(function(doc) {
+            var types = new Set();
+            doc.forEach(item => {
+                types.add(item.type);
+            })
+            var t = [...types];
+            socket.emit('type/all:result', t);
+        });
+    });
+
+    socket.on('product/on_type:get', (type) => {
+        var query = Grocery.find({
+            'type': type
+        });
+        const products = {};
+        products[type] = [];
+        query.then(function(doc) {
+            doc.map((content) => {
+                products[type].push(content.name);
+            })
+            socket.emit('product/on_type:result', products);
+        });
+    })
+
+    /* ---- DELETE ---- */
+    socket.on('product:delete', (product) => {
+        Grocery.deleteOne({
+            name: product
+        }, (err) => {
+            console.log(err);
+        });
+
+        io.sockets.emit('grocery:refresh');
+    });
+
+    /* ---- MISCELLANOUS ---- */
+    socket.on('debug', (type) => {
+        var query = Grocery.find({}, 'name type');
+        query.then(function(doc) {
+
+        });
     });
 });
