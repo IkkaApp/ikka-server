@@ -15,8 +15,11 @@
   "author": "Florent DUPONT",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^3.0.2",
     "body-parser": "^1.18.3",
+    "cookie-parser": "^1.4.3",
     "express": "^4.16.4",
+    "jsonwebtoken": "^8.4.0",
     "mongoose": "^4.13.17",
     "socket.io": "^2.1.1"
   }

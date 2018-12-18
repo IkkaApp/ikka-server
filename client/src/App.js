@@ -1,83 +1,90 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 import {socket} from './config/communications.js';
-// import Product from './components/Product/Product.js';
 import Category from './components/Category/Category.js';
+import Signup from './components/Signup/Signup.js';
+import axios from 'axios';
+import {endpointPort, endpointIP} from './config/resources.js'
 
 class App extends Component {
-    constructor(props) {
-        super(props);
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            types: []
-        }
-
-        this.searchItems = this.searchItems.bind(this);
-        this.deleteSelected = this.deleteSelected.bind(this);
-        this.debugAction = this.debugAction.bind(this);
-        this.handleChange = this.handleChange.bind(this);
+    this.state = {
+      types: []
     }
 
-    componentDidMount() {
-        // Listen for categories incoming
-        socket.on('type/all:result', (types) => {
-            if (types != null) 
-                this.setState({types: types});
-            else 
-                console.log('Nothing found');
-            }
-        );
+    this.searchItems = this.searchItems.bind(this);
+    this.deleteSelected = this.deleteSelected.bind(this);
+    this.debugAction = this.debugAction.bind(this);
+    this.handleChange = this.handleChange.bind(this);
+  }
 
-        // Get groceries on connection
-        socket.on('connected', () => {
-            console.log('[Socket.io] Connected');
-            socket.emit('type/all:get');
-        });
+  componentDidMount() {
+    // Listen for categories incoming
+    socket.on('type/all:result', (types) => {
+      if (types != null) 
+        this.setState({types: types});
+      else 
+        console.log('Nothing found');
+      }
+    );
 
-        // Listen for server side refresh
-        socket.on('grocery:refresh', () => {
-            socket.emit('type/all:get');
-            this.forceUpdate();
-            console.log('forcerefreshed Category');
-        });
-    }
+    // Get groceries on connection
+    socket.on('connected', () => {
+      console.log('[Socket.io] Connected');
+      socket.emit('type/all:get');
+    });
 
-    // BUTTONS
-    searchItems() {
-        socket.emit('type/all:get');
-        // if (this.state.searchInput === '')
-        //     socket.emit('get_all_products', {});
-        // else
-        //     socket.emit('get_product', {object: this.state.searchInput});
-    }
+    // Listen for server side refresh
+    socket.on('product:refresh', () => {
+      socket.emit('type/all:get');
+      this.forceUpdate();
+      console.log('forcerefreshed Category');
+    });
+  }
 
-    deleteSelected() {
-        socket.emit('product:delete', this.state.searchInput);
-    }
+  // BUTTONS
+  searchItems() {
+    socket.emit('type/all:get');
+    // if (this.state.searchInput === '')
+    //     socket.emit('get_all_products', {});
+    // else
+    //     socket.emit('get_product', {object: this.state.searchInput});
+  }
 
-    debugAction() {
-        socket.emit('debug');
-    }
+  deleteSelected() {
+    socket.emit('product:delete', this.state.searchInput);
+  }
 
-    handleChange(event) {
-        this.setState({searchInput: event.target.value});
-    }
+  debugAction() {
+    axios.post('http://' + endpointIP + ':' + endpointPort + '/login', {user: 'hello world'}).then((res) => {
+      console.log(res)
+    }).catch((error) => {
+      console.error(error)
+    });
+  }
 
-    render() {
-        return (<div className="App">
-            <header className="App-header">
-                <input type="text" value={this.state.searchInput} onChange={this.handleChange}/>
+  handleChange(event) {
+    this.setState({searchInput: event.target.value});
+  }
 
-                <button onClick={this.searchItems}>Get products</button>
-                <button onClick={this.deleteSelected}>Delete</button>
-                <button onClick={this.debugAction}>debugAction</button>
+  render() {
+    return (<div className="App">
+      <header className="App-header">
+        <input type="text" value={this.state.searchInput} onChange={this.handleChange}/>
 
-                {this.state.types.map((type) => <Category name={type} key={type}/>)}
-            </header>
+        <button onClick={this.searchItems}>Get products</button>
+        <button onClick={this.deleteSelected}>Delete</button>
+        <button onClick={this.debugAction}>debugAction</button>
 
-        </div>);
-    }
+        {this.state.types.map((type) => <Category name={type} key={type}/>)}
+
+        <Signup></Signup>
+      </header>
+
+    </div>);
+  }
 }
 
 export default App;
