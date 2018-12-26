@@ -1,5 +1,10 @@
 import React, {Component} from 'react';
-import {socket} from './../../config/communications.js';
+import {connect} from 'react-redux';
+// import {socket} from './../../config/communications.js';
+
+const mapStateToProps = state => {
+  return {socket: state.socket};
+};
 
 class Product extends Component {
   constructor(props) {
@@ -12,7 +17,7 @@ class Product extends Component {
   }
 
   deleteProduct() {
-    socket.emit('product:delete', this.state.name);
+    this.props.socket.emit('product:delete', this.state.name);
   }
 
   render() {
@@ -28,4 +33,4 @@ class Product extends Component {
   }
 }
 
-export default Product;
+export default connect(mapStateToProps, null)(Product);

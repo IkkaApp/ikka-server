@@ -1,6 +1,18 @@
 import React, {Component} from 'react';
 import Product from './../Product/Product.js';
-import {socket} from './../../config/communications.js';
+import {connect} from 'react-redux';
+// import {addProduct, setUserAuth} from './../../redux/actions/index.actions.js'
+
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     addProduct: product => dispatch(addProduct(product)),
+//     setUserAuth: user => dispatch(setUserAuth(user))
+//   };
+// }
+
+const mapStateToProps = state => {
+  return {socket: state.socket};
+};
 
 class Category extends Component {
   constructor(props) {
@@ -13,7 +25,7 @@ class Category extends Component {
 
   componentDidMount() {
     // Listen for incoming products
-    socket.on('product/on_type:result', (data) => {
+    this.props.socket.on('product/on_type:result', (data) => {
       if (data[this.state.name] != null) 
         this.setState({
           products: data[this.state.name]
@@ -22,14 +34,16 @@ class Category extends Component {
     );
 
     // Listen for server side refresh
-    socket.on('product:refresh', () => {
-      socket.emit('product/on_type:get', this.state.name);
+    this.props.socket.on('product:refresh', () => {
+      this.props.socket.emit('product/on_type:get', this.state.name);
       this.forceUpdate();
       console.log('forcerefreshed Product');
     });
 
     // Ask for products depending on type
-    socket.emit('product/on_type:get', this.state.name);
+    this.props.socket.emit('product/on_type:get', this.state.name);
+
+    // this.props.addProduct('hello');
   }
 
   // {
@@ -47,4 +61,4 @@ class Category extends Component {
   }
 }
 
-export default Category;
+export default connect(mapStateToProps, null)(Category);

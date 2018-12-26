@@ -3,6 +3,7 @@ const bodyParser = require("body-parser");
 const mongoose = require('mongoose');
 const config = require('./config/resources.js');
 const io = module.exports = require('socket.io')();
+const socketioJwt = require("socketio-jwt");
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cookieParser = require('cookie-parser');
@@ -10,7 +11,6 @@ const cookieParser = require('cookie-parser');
 const Product = require('./models/product.model.js')
 const authRoute = require('./routes/auth.route.js');
 const productRoute = require('./routes/product.route.js');
-// import {endpointPort, endpointIP} from './config/resources.js'
 
 // MongoDB initialization and connection
 mongoose.Promise = Promise;
@@ -71,12 +71,18 @@ io.listen(app.listen(config.serverPort, config.serverIP, () => {
 }));
 
 
-
+io.use(socketioJwt.authorize({
+  secret: config.secret,
+  handshake: true
+}));
 
 io.on('connection', function(socket) {
   console.log('\x1b[36m%s\x1b[0m', '[Socket.io] User connected');
   socket.emit('connected');
 
+  socket.on('authenticated', function(socket) {
+    console.log('hello! ' + socket.decoded_token.name);
+  });
   socket.on('disconnect', function() {
     console.log('\x1b[36m%s\x1b[0m', '[Socket.io] User disconnected');
   });

@@ -21,6 +21,7 @@
     "express": "^4.16.4",
     "jsonwebtoken": "^8.4.0",
     "mongoose": "^4.13.17",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.1.1",
+    "socketio-jwt": "^4.5.0"
   }
 }
