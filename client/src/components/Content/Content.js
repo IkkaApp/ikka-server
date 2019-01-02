@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import Category from './../Category/Category.js';
+import Category from '../Category/Category.js';
 import {connect} from 'react-redux';
-import {setToken, setSocket} from './../../redux/actions/index.actions.js'
-import {connectSocket} from './../../config/communications.js'
+import {setToken, setSocket} from '../../redux/actions/index.actions.js'
+import {connectSocket} from '../../config/communications.js'
 
 function mapDispatchToProps(dispatch) {
   return ({

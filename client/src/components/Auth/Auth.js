@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import str from './../../constants/labels.constants.js'
-import Signin from './../Signin/Signin.js'
-import Signup from './../Signup/Signup.js'
+import str from '../../constants/labels.constants.js'
+import Signin from '../Signin/Signin.js'
+import Signup from '../Signup/Signup.js'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {endpointPort, endpointIP} from './../../config/resources.js'
-import {setUserAuth, setAppStarting, setToken} from './../../redux/actions/index.actions.js'
+import {endpointPort, endpointIP} from '../../config/resources.js'
+import {setUserAuth, setAppStarting, setToken} from '../../redux/actions/index.actions.js'
 
 function mapDispatchToProps(dispatch) {
   return ({

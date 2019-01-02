@@ -17,13 +17,13 @@ module.exports = (() => {
           .exec()
           .then((user) => {
             if (user) { // User exists
-              res.status(200).json({
+              return res.status(200).json({
                 email: decoded.email,
                 token: req.cookies.token
               })
             } else { // User no longer exists
               res.clearCookie('token')
-              res.status(401).send({
+              return res.status(401).send({
                 error: 'USER_NO_LONGER_EXISTS'
               })
             }
@@ -31,7 +31,7 @@ module.exports = (() => {
 
       } else { // Token expired or no token
         res.clearCookie('token')
-        res.status(401).send({
+        return res.status(401).send({
           error: 'TOKEN_EXPIRED'
         })
       }
@@ -55,7 +55,7 @@ module.exports = (() => {
             .exec()
             .then((user) => {
               if (user) { // User already exists
-                res.status(409).json({
+                return res.status(409).json({
                   error: 'USER_ALREADY_EXISTS'
                 })
               } else { // User doesn't exists for now
@@ -78,13 +78,13 @@ module.exports = (() => {
                     expiresIn: 90000,
                     httpOnly: true
                   })
-                  res.status(201).json({
+                  return res.status(201).json({
                     success: 'New user has been created',
                     token: JWTToken
                   })
                 }).catch((error) => {
                   console.log(error)
-                  res.status(500).json({
+                  return res.status(500).json({
                     error: 'INTERNAL_SERVER_ERROR'
                   })
                 })
@@ -92,7 +92,7 @@ module.exports = (() => {
             })
             .catch(err => {
               console.log(err)
-              res.status(500).json({
+              return res.status(500).json({
                 error: 'INTERNAL_SERVER_ERROR'
               })
             })
@@ -126,18 +126,17 @@ module.exports = (() => {
                 expiresIn: 90000,
                 httpOnly: true
               })
-              res.status(200).json({
+              return res.status(200).json({
                 message: 'Login successful',
                 token: JWTToken
               })
-            } else {
-              res.status(401).json({
-                error: 'WRONG_PASSWORD'
-              });
             }
+            return res.status(401).json({
+              error: 'WRONG_PASSWORD'
+            });
           });
         } else { // User doesn't exists
-          res.status(401).json({
+          return res.status(401).json({
             error: 'USER_NOT_FOUND'
           })
         }
@@ -148,7 +147,7 @@ module.exports = (() => {
   router.route('/logout')
     .post((req, res) => {
       res.clearCookie('token')
-      res.status(204).send({
+      return res.status(204).send({
         message: 'Logout successful'
       })
     })

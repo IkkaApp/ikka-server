@@ -1,4 +1,4 @@
-import act from './../../constants/actions.constants.js'
+import act from '../../constants/actions.constants.js'
 
 let nextProductId = 0;
 export const addProduct = content => ({

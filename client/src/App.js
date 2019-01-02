@@ -1,11 +1,11 @@
 import React, {Component} from 'react';
-import './App.css';
-import Content from './components/Content/Content.js';
-import Auth from './components/Auth/Auth.js'
+import 'App.css';
+import Content from 'components/Content/Content.js';
+import Auth from 'components/Auth/Auth.js'
 import axios from 'axios';
-import {endpointPort, endpointIP} from './config/resources.js'
+import {endpointPort, endpointIP} from 'config/resources'
 import {connect} from "react-redux";
-import {setUserAuth} from './redux/actions/index.actions.js'
+import {setUserAuth} from 'redux/actions/index.actions.js'
 
 function mapDispatchToProps(dispatch) {
   return ({
