@@ -2,7 +2,7 @@
     "name": "ikka-serv",
     "script": "app.js",
     "watch": true,
-    "ignore_watch": ["[\\/\\\\]\\./", ".git", "node_modules", "client", "client/node_modules"],
+    "ignore_watch": ["[\\/\\\\]\\./", ".git", "node_modules", "client", "client/node_modules", "client/src"],
     "watch_options": {
         "followSymlinks": false
     }

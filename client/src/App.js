@@ -6,6 +6,7 @@ import axios from 'axios';
 import {endpointPort, endpointIP} from 'config/resources'
 import {connect} from "react-redux";
 import {setUserAuth} from 'redux/actions/index.actions.js'
+import {Grid, Row, Col, ButtonToolbar} from 'react-bootstrap';
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -50,12 +51,31 @@ class App extends Component {
 
   render() {
     return (<div className="App">
-      <header className="App-header">
-        <button onClick={this.debugAction}>DEBUG MAIN</button>
-        {this.props.isConnected && <button onClick={this.disconnectUser}>Log out</button>}
-        {!this.props.isConnected && <Auth></Auth>}
-        {this.props.isConnected && <Content/>}
-      </header>
+      <Grid>
+        <Row className="show-grid">
+          <Col>
+            <button onClick={this.debugAction}>DEBUG MAIN</button>
+            {this.props.isConnected && <button onClick={this.disconnectUser}>Log out</button>}
+
+            <Grid>
+              <Row className="show-grid">
+                <Col md={6} mdOffset={3}>
+                  {!this.props.isConnected && <Auth></Auth>}
+                </Col>
+              </Row>
+            </Grid>
+
+            <Grid>
+              <Row className="show-grid">
+                <Col md={12}>
+                  {this.props.isConnected && <Content/>}
+                </Col>
+              </Row>
+            </Grid>
+
+          </Col>
+        </Row>
+      </Grid>
     </div>);
   }
 }
