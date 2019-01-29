@@ -30,7 +30,7 @@ class Auth extends Component {
     super(props);
 
     this.state = {
-      authState: str.SIGNUP,
+      authState: str.SIGNIN,
       username: ''
     }
 

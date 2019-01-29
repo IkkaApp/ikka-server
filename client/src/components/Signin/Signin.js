@@ -4,6 +4,20 @@ import {endpointIP, endpointPort} from '../../config/resources.js'
 import {connect} from 'react-redux';
 import {setUserAuth, setToken} from '../../redux/actions/index.actions.js'
 import str from '../../constants/labels.constants.js'
+import './Signin.scss';
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {
+  Grid,
+  Row,
+  Col,
+  Form,
+  FormGroup,
+  FormControl,
+  Checkbox,
+  ControlLabel,
+  Button,
+  HelpBlock
+} from 'react-bootstrap'
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -27,7 +41,10 @@ class Signin extends Component {
       usernameInput: '',
       passwordInput: '',
       username: '',
-      errorMessage: ''
+      errorMessage: '',
+      usernameState: null,
+      passwordState: null,
+      buttonDisabled: false
     };
 
     this.handleUsernameChange = this.handleUsernameChange.bind(this);
@@ -48,41 +65,62 @@ class Signin extends Component {
   }
 
   signinUser() {
+    this.setState({buttonDisabled: true});
     axios.post('http://' + endpointIP + ':' + endpointPort + '/login', {
       email: this.state.usernameInput,
       password: this.state.passwordInput
     }).then((res) => {
       if (res.status === 200) {
         this.props.setUserAuth(true);
-        // TODO: clear errorMessage
         this.props.setToken(res.data.token);
       }
+      this.setState({buttonDisabled: false});
     }).catch((err) => {
       console.log(err);
       this.props.setToken('');
       this.setState({
-        errorMessage: str[err.response.data.error]
+        // errorMessage: (
+        //   err == 'Network Error'
+        //   ? str[err.response.data.error]
+        //   : 'Server is currently burning, please try again later'),
+        errorMessage: str[err.response.data.error],
+        usernameState: 'error',
+        passwordState: 'error',
+        buttonDisabled: false
       });
       this.props.setUserAuth(false);
     });
   }
 
+  // TODO: set input rules
+  // TODO: reset validation rules on input focus
   render() {
-    return <div>
-      <form>
-        <label>
-          Username:
-          <input name="username" onChange={this.handleUsernameChange}/>
-        </label>
-        <br/>
-        <label>
-          Password:
-          <input name="password" type="password" onChange={this.handlePasswordChange}/>
-        </label>
-      </form>
-      <span>{this.state.errorMessage}</span>
-      <button onClick={this.signinUser}>Signin</button>
-    </div>;
+    return <Form horizontal={true} className='signinForm mt-5'>
+      <FormGroup controlId='formHorizontalEmail' bsSize='large' validationState={this.state.usernameState}>
+        <Col sm={8} smOffset={2}>
+          <FormControl type='email' placeholder='Email' name='username' onChange={this.handleUsernameChange}/>
+        </Col>
+      </FormGroup>
+
+      <FormGroup controlId='formHorizontalPassword' bsSize='large' validationState={this.state.passwordState}>
+        <Col sm={8} smOffset={2}>
+          <FormControl type='password' placeholder='Password' name='password' onChange={this.handlePasswordChange}/>
+        </Col>
+        <Col sm={8} smOffset={2}>
+          <HelpBlock>{this.state.errorMessage}</HelpBlock>
+        </Col>
+      </FormGroup>
+
+      <FormGroup>
+        <Col sm={8} smOffset={2}>
+          <Button type='button' block={true} bsSize='large' bsStyle='success' onClick={this.signinUser} disabled={this.state.buttonDisabled}>{
+              this.state.buttonDisabled
+                ? <FontAwesomeIcon icon="circle-notch" spin={true} size='lg'/>
+                : 'Sign in'
+            }</Button>
+        </Col>
+      </FormGroup>
+    </Form>;
   }
 }
 

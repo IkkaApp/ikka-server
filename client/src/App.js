@@ -7,6 +7,11 @@ import {endpointPort, endpointIP} from 'config/resources'
 import {connect} from "react-redux";
 import {setUserAuth} from 'redux/actions/index.actions.js'
 import {Grid, Row, Col, ButtonToolbar} from 'react-bootstrap';
+import {library} from '@fortawesome/fontawesome-svg-core'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import {faCircleNotch} from '@fortawesome/free-solid-svg-icons'
+
+library.add(faCircleNotch)
 
 function mapDispatchToProps(dispatch) {
   return ({
