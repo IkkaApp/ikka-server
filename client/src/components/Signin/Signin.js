@@ -95,24 +95,24 @@ class Signin extends Component {
   // TODO: set input rules
   // TODO: reset validation rules on input focus
   render() {
-    return <Form horizontal={true} className='signinForm mt-5'>
+    return <Form horizontal={true} className='signinForm'>
       <FormGroup controlId='formHorizontalEmail' bsSize='large' validationState={this.state.usernameState}>
-        <Col sm={8} smOffset={2}>
+        <Col sm={12} smOffset={0}>
           <FormControl type='email' placeholder='Email' name='username' onChange={this.handleUsernameChange}/>
         </Col>
       </FormGroup>
 
       <FormGroup controlId='formHorizontalPassword' bsSize='large' validationState={this.state.passwordState}>
-        <Col sm={8} smOffset={2}>
+        <Col sm={12} smOffset={0}>
           <FormControl type='password' placeholder='Password' name='password' onChange={this.handlePasswordChange}/>
         </Col>
-        <Col sm={8} smOffset={2}>
+        <Col sm={12} smOffset={0}>
           <HelpBlock>{this.state.errorMessage}</HelpBlock>
         </Col>
       </FormGroup>
 
       <FormGroup>
-        <Col sm={8} smOffset={2}>
+        <Col sm={12} smOffset={0}>
           <Button type='button' block={true} bsSize='large' bsStyle='success' onClick={this.signinUser} disabled={this.state.buttonDisabled}>{
               this.state.buttonDisabled
                 ? <FontAwesomeIcon icon="circle-notch" spin={true} size='lg'/>

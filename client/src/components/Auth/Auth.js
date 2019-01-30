@@ -6,6 +6,9 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import {endpointPort, endpointIP} from '../../config/resources.js'
 import {setUserAuth, setAppStarting, setToken} from '../../redux/actions/index.actions.js'
+import {Grid, Row, Col, Button} from 'react-bootstrap'
+import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
+import './Auth.scss';
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -68,22 +71,28 @@ class Auth extends Component {
   render() {
     return <div>
       <hr/>
-      <span>{
-          this.props.isConnected
-            ? <span>Logged as {this.state.username}</span>
-            : 'Disconnected'
-        }</span>
-      <button onClick={this.switchAuth}>Switch to {
-          this.state.authState === str.SIGNUP
-            ? str.SIGNIN
-            : str.SIGNUP
-        }</button>
-      <h3>{this.state.authState}</h3>
-      {
-        this.state.authState === str.SIGNUP
-          ? <Signup></Signup>
-          : <Signin></Signin>
-      }
+      <Grid>
+        <Row>
+          <Col sm={6} smOffset={3} className='authContainer'>
+            <Row>
+              <Col sm={4} smOffset={8}>
+                <Button onClick={this.switchAuth} type='button' block={true} bsStyle='info' className='authSwitcher'>
+                  <FontAwesomeIcon icon="arrow-circle-right" size='lg'/> {
+                    this.state.authState === str.SIGNUP
+                      ? str.SIGNIN
+                      : str.SIGNUP
+                  }</Button>
+              </Col>
+            </Row>
+
+            {
+              this.state.authState === str.SIGNUP
+                ? <Signup></Signup>
+                : <Signin></Signin>
+            }
+          </Col>
+        </Row>
+      </Grid>
     </div>;
   }
 }

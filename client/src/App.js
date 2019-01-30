@@ -9,9 +9,9 @@ import {setUserAuth} from 'redux/actions/index.actions.js'
 import {Grid, Row, Col, ButtonToolbar} from 'react-bootstrap';
 import {library} from '@fortawesome/fontawesome-svg-core'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import {faCircleNotch} from '@fortawesome/free-solid-svg-icons'
+import {faCircleNotch, faArrowCircleRight} from '@fortawesome/free-solid-svg-icons'
 
-library.add(faCircleNotch)
+library.add(faCircleNotch, faArrowCircleRight)
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -64,7 +64,7 @@ class App extends Component {
 
             <Grid>
               <Row className="show-grid">
-                <Col md={6} mdOffset={3}>
+                <Col sm={12}>
                   {!this.props.isConnected && <Auth></Auth>}
                 </Col>
               </Row>
@@ -72,7 +72,7 @@ class App extends Component {
 
             <Grid>
               <Row className="show-grid">
-                <Col md={12}>
+                <Col sm={12}>
                   {this.props.isConnected && <Content/>}
                 </Col>
               </Row>
