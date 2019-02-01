@@ -3,6 +3,7 @@ import Category from '../Category/Category.js';
 import {connect} from 'react-redux';
 import {setToken, setSocket} from '../../redux/actions/index.actions.js'
 import {connectSocket} from '../../config/communications.js'
+import {Grid, Row, Col} from 'react-bootstrap'
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -89,9 +90,16 @@ class Content extends Component {
   // <button onClick={this.debugAction}>debugAction</button>
 
   render() {
-    return (<div>
-      <hr/> {this.state.types.map((type) => <Category name={type} key={type}/>)}
-    </div>);
+    return <div>
+      <hr/>
+      <Grid>
+        <Row>
+          <Col>
+            {this.state.types.map((type) => <Category name={type} key={type}/>)}
+          </Col>
+        </Row>
+      </Grid>
+    </div>;
   }
 }
 

@@ -1,14 +1,7 @@
 import React, {Component} from 'react';
 import Product from '../Product/Product.js';
 import {connect} from 'react-redux';
-// import {addProduct, setUserAuth} from './../../redux/actions/index.actions.js'
-
-// function mapDispatchToProps(dispatch) {
-//   return {
-//     addProduct: product => dispatch(addProduct(product)),
-//     setUserAuth: user => dispatch(setUserAuth(user))
-//   };
-// }
+import {Col, Row, Grid} from 'react-bootstrap';
 
 const mapStateToProps = state => {
   return {socket: state.socket};
@@ -54,10 +47,18 @@ class Category extends Component {
   //     }
   // }
   render() {
-    return <div>
-      <h3>{this.state.name}</h3>
-      {this.state.products.map((name) => <Product name={name} key={name}/>)}
-    </div>;
+    return <Grid>
+      <Row>
+        <Col sm={12}>
+          <h3>{this.state.name}</h3>
+        </Col>
+      </Row>
+      <Row>
+        <Col sm={12}>
+          {this.state.products.map((name) => <Product name={name} key={name}/>)}
+        </Col>
+      </Row>
+    </Grid>;
   }
 }
 

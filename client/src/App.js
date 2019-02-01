@@ -6,10 +6,10 @@ import axios from 'axios';
 import {endpointPort, endpointIP} from 'config/resources'
 import {connect} from "react-redux";
 import {setUserAuth} from 'redux/actions/index.actions.js'
-import {Grid, Row, Col, ButtonToolbar} from 'react-bootstrap';
+import {Grid, Row, Col} from 'react-bootstrap';
 import {library} from '@fortawesome/fontawesome-svg-core'
-import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {faCircleNotch, faArrowCircleRight} from '@fortawesome/free-solid-svg-icons'
+// import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 
 library.add(faCircleNotch, faArrowCircleRight)
 
@@ -57,13 +57,13 @@ class App extends Component {
   render() {
     return (<div className="App">
       <Grid>
-        <Row className="show-grid">
+        <Row>
           <Col>
             <button onClick={this.debugAction}>DEBUG MAIN</button>
             {this.props.isConnected && <button onClick={this.disconnectUser}>Log out</button>}
 
             <Grid>
-              <Row className="show-grid">
+              <Row>
                 <Col sm={12}>
                   {!this.props.isConnected && <Auth></Auth>}
                 </Col>
@@ -71,7 +71,7 @@ class App extends Component {
             </Grid>
 
             <Grid>
-              <Row className="show-grid">
+              <Row>
                 <Col sm={12}>
                   {this.props.isConnected && <Content/>}
                 </Col>

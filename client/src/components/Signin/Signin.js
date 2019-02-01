@@ -1,20 +1,16 @@
 import React, {Component} from 'react';
+import './Signin.scss';
 import axios from 'axios';
 import {endpointIP, endpointPort} from '../../config/resources.js'
 import {connect} from 'react-redux';
 import {setUserAuth, setToken} from '../../redux/actions/index.actions.js'
 import str from '../../constants/labels.constants.js'
-import './Signin.scss';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
 import {
-  Grid,
-  Row,
   Col,
   Form,
   FormGroup,
   FormControl,
-  Checkbox,
-  ControlLabel,
   Button,
   HelpBlock
 } from 'react-bootstrap'

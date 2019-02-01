@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import str from '../../constants/labels.constants.js'
+import './Auth.scss';
 import Signin from '../Signin/Signin.js'
 import Signup from '../Signup/Signup.js'
-import {connect} from 'react-redux';
-import axios from 'axios';
+import str from '../../constants/labels.constants.js'
 import {endpointPort, endpointIP} from '../../config/resources.js'
+import axios from 'axios';
+import {connect} from 'react-redux';
 import {setUserAuth, setAppStarting, setToken} from '../../redux/actions/index.actions.js'
-import {Grid, Row, Col, Button} from 'react-bootstrap'
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome'
-import './Auth.scss';
+import {Grid, Row, Col, Button} from 'react-bootstrap'
 
 function mapDispatchToProps(dispatch) {
   return ({
@@ -34,7 +34,8 @@ class Auth extends Component {
 
     this.state = {
       authState: str.SIGNIN,
-      username: ''
+      username: '',
+      intervalId: null // DEBUG Used to reconnect after server booting
     }
 
     this.switchAuth = this.switchAuth.bind(this);
@@ -43,7 +44,7 @@ class Auth extends Component {
   componentDidMount() {
     axios.defaults.withCredentials = true;
 
-    if (this.props.isStarting) 
+    if (this.props.isStarting) {
       axios.post('http://' + endpointIP + ':' + endpointPort + '/login/start', {}).then((res) => {
         this.props.setUserAuth(true);
         this.props.setAppStarting(false);
@@ -55,7 +56,35 @@ class Auth extends Component {
         this.props.setToken('');
       });
     }
-  
+
+    if (this.props.token === '') {
+      var intervalId = setInterval(this.timer.bind(this), 500);
+      this.setState({intervalId: intervalId});
+    }
+  }
+
+  // DEBUG
+  timer() {
+    console.log('test');
+    if (this.props.token === '') {
+      axios.post('http://' + endpointIP + ':' + endpointPort + '/login/start', {}).then((res) => {
+        this.props.setUserAuth(true);
+        this.props.setAppStarting(false);
+        this.props.setToken(res.data.token);
+      }).catch((err) => {
+        console.error(err.response);
+        this.props.setUserAuth(false);
+        this.props.setAppStarting(false);
+        this.props.setToken('');
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.state.intervalId);
+  }
+  // DEBUG END
+
   // BUTTONS
   switchAuth() {
     this.setState((state, props) => {

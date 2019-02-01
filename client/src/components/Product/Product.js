@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
 import './Product.scss';
-import {Col, Row, Grid} from 'react-bootstrap';
-// import {socket} from './../../config/communications.js';
+import {connect} from 'react-redux';
+import {Col, Row, Grid, Button} from 'react-bootstrap';
 
 const mapStateToProps = state => {
   return {socket: state.socket};
@@ -18,65 +17,64 @@ class Product extends Component {
 
     this.deleteProduct = this.deleteProduct.bind(this)
     this.toggleProduct = this.toggleProduct.bind(this)
+    this.testButton = this.testButton.bind(this)
   }
 
   deleteProduct() {
-    // this.props.socket.emit('product:delete', this.state.name);
-    this.setState((state, props) => {
-      return {
-        editMode: !state.editMode
-      }
-    })
+    this.props.socket.emit('product:delete', this.state.name);
   }
 
-  toggleProduct() {
-    this.setState((state, props) => {
-      return {
-        editMode: !state.editMode
-      }
-    })
+  toggleProduct(event) {
+    if (event.target.tagName !== 'BUTTON') 
+      this.setState((state, props) => {
+        return {
+          editMode: !state.editMode
+        }
+      })
+  }
+
+  testButton(event) {
+    console.log('click');
   }
 
   render() {
-    const thisStyle = {
-      maxWidth: '100%',
-      maxHeight: '100%'
-    };
-
     let displayMode = (
       this.state.editMode
-      ? 'fadeOut'
-      : 'fadeIn') + ' displayContainer';
+      ? 'displayFadeOut'
+      : 'fadeIn') + ' productInside';
 
     let editMode = (
       this.state.editMode
       ? 'fadeIn'
-      : 'fadeOut2') + ' editContainer';
-    // <div className='container2'>
-    //   <div>
-    //     <div className={displayMode}>
-    //       <span>{this.state.name}</span>
-    //     </div>
-    //     <div className='editContainer'>
-    //       <div className={editMode}>
-    //         <span>Return</span>
-    //       </div>
-    //     </div>
-    //   </div>
-    // </div>
+      : 'editFadeOut') + ' editContainer';
 
     return <Grid className='productContainer'>
-      <Row className='productInside'>
-        <Col sm={2}>
-          <img src='https://static.openfoodfacts.org/images/products/302/933/000/3533/nutrition_fr.101.400.jpg' className='productImage'/>
+      <Row className={displayMode} onClick={this.toggleProduct}>
+        <Col sm={2} xs={2}>
+          <img src='https://static.openfoodfacts.org/images/products/302/933/000/3533/nutrition_fr.101.400.jpg' alt='ProductImg' className='productImage'/>
         </Col>
-        <Col sm={6}>
+        <Col sm={6} xs={6}>
           <span>Beautiful product</span>
         </Col>
-        <Col sm={1} smOffset={3} className='quantityGauge'>
-          <div ></div>
+        <Col sm={1} smOffset={3} xs={3} xsOffset={1} className='quantityGauge'>
+          <div></div>
         </Col>
       </Row>
+
+      <Grid className={editMode}>
+        <Row onClick={this.toggleProduct}>
+          <Col sm={2} xs={2}>
+            <Button type='button' block={true} bsSize='large' bsStyle='success' onClick={this.testButton}>TEST</Button>
+          </Col>
+          <Col sm={6} xs={6}>
+            <Button type='button' block={true} bsSize='large' bsStyle='success' onClick={this.testButton}>TEST</Button>
+          </Col>
+          <Col sm={3} smOffset={1} xs={3} xsOffset={1}>
+            <Button type='button' block={true} bsSize='large' bsStyle='success' onClick={this.testButton}>TEST</Button>
+          </Col>
+        </Row>
+      </Grid>
+
     </Grid>;
   }
 }

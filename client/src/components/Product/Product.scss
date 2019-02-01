@@ -1,24 +1,21 @@
-$animationTime: 0.2s;
-$easeMode: ease-in;
-$easeMode2: ease-out;
-$offset: 50%;
-$offset2: $offset + 50%;
+$animationTime: 0.5s;
+$animationTime2: $animationTime/2;
+$easeMode: ease-out;
+$easeMode2: ease-in;
+$offset: 100%;
+$offset2: 100%;
 
 
 .productContainer {
   background: #dedede4d;
-  // border: solid 2px rgb(84, 86, 89);
   border-radius: 5px;
-  // padding: 2rem 1rem;
-  // width: 20rem;
   margin-bottom: 5%;
-  // box-shadow: 0px 0px 4px 1px #FFFFFF;
+  box-shadow: 0px 0px 4px 1px #000000;
   // filter: blur(2px);
   border-left: solid 6px red;
   padding-left: 0px;
   overflow: hidden;
-  // max-height: 1rem;
-
+  position: relative;
 }
 
 .productInside {
@@ -38,66 +35,47 @@ $offset2: $offset + 50%;
   height: 6rem;
 }
 
-.displayContainer {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
 .editContainer {
   // display: flex;
   position: absolute;
   top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.colorIndicator {
-  position: absolute;
-  height: 1000%;
-  background: rgb(107, 237, 131);
-  transform: translate(-50%, -50%);
+  // left: 50%;
+  transform: translateY(-50%);
+  // top: 0;
   left: 0;
-  width: 10px;
-}
-
-.container2 {
-  position: relative;
-  float: left;
-  left: 5px;
+  width: 100%;
 }
 
 
-
-.fadeOut {
-  -ms-transform: translate($offset, -50%);
-  -webkit-transform: translate($offset, -50%);
-  transform: translate($offset, -50%);
+.displayFadeOut {
+  -ms-transform: translateX($offset);
+  -webkit-transform: translateX($offset);
+  transform: translateX($offset);
+  -webkit-transition: $animationTime2 $easeMode2;
+  -moz-transition: $animationTime2 $easeMode2;
+  -o-transition: $animationTime2 $easeMode2;
+  transition: $animationTime2 $easeMode2;
   opacity: 0;
-  -webkit-transition: $animationTime $easeMode2;
-  -moz-transition: $animationTime $easeMode2;
-  -o-transition: $animationTime $easeMode2;
-  transition: $animationTime $easeMode2;
   visibility: hidden;
 }
 
 .fadeIn {
   opacity: 1;
+  visibility: visible;
   -webkit-transition: $animationTime $easeMode;
   -moz-transition: $animationTime $easeMode;
   -o-transition: $animationTime $easeMode;
   transition: $animationTime $easeMode;
 }
 
-.fadeOut2 {
+.editFadeOut {
   -ms-transform: translate(-$offset2, -50%);
   -webkit-transform: translate(-$offset2, -50%);
   transform: translate(-$offset2, -50%);
+  -webkit-transition: $animationTime2 $easeMode2;
+  -moz-transition: $animationTime2 $easeMode2;
+  -o-transition: $animationTime2 $easeMode2;
+  transition: $animationTime2 $easeMode2;
   opacity: 0;
-  -webkit-transition: $animationTime $easeMode2;
-  -moz-transition: $animationTime $easeMode2;
-  -o-transition: $animationTime $easeMode2;
-  transition: $animationTime $easeMode2;
   visibility: hidden;
 }
